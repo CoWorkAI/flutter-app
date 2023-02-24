@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="facebook_app_id">3317264541819071</string>
+    <string name="facebook_client_token">f881dcb401b57a3c696f4cde9bd31216</string>
+    <string name="app_name">"CoWork"</string>
+    <string name="fb_login_protocol_scheme">"oAuth2"</string>
+</resources>
