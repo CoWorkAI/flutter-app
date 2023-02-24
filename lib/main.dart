@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'chatapalooza.dart';
+
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -236,6 +238,32 @@ class _MyHomePageState extends State<MyHomePage> {
                 _login();
               },
               child: Text('Connect Instagram'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.white,
+                onPrimary: buildMaterialColor(Color(0xFF323232)),
+                // shadowColor: Colors.greenAccent,
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(32.0)),
+                minimumSize: Size(100, 40), //////// HERE
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) =>
+                        Chatapalooza(
+                            'You are logged in as a guest. Please log in with Facebook/Instagram as a business to utilize full functionality. You can email faalbane@gmail for test access; we are in the process of being approved for a production app open to public users',
+                            'Guest',
+                            '',
+                            ''
+                        ),
+                  ),
+                );
+              },
+              child: Text('Enter as a guest'),
             )
 
           ],
