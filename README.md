@@ -1,16 +1,5 @@
 # withfaithcowork
 
-A new Flutter project.
+CoWork.AI LabLab Hackathon Submission 2.24.23
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Demo: https://www.loom.com/share/956f4ea81e274638b82b21444f6985a4
