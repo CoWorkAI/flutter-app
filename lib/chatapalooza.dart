@@ -1,4 +1,5 @@
 
+import 'package:CoWork/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'dart:convert';
@@ -96,6 +97,18 @@ class _ChatapaloozaState extends State<Chatapalooza> {
 
     _addMessage(textMessage);
 
+    var customPing = types.TextMessage(
+      author: _cowork,
+      createdAt: DateTime.now().millisecondsSinceEpoch,
+      id: const Uuid().v4(),
+      text: "test",
+      metadata: {
+        'action_key': 'gen'
+      }
+    );
+    _addMessage(customPing);
+
+
     flow_step = 'upload_product_photo';
 
   }
@@ -180,6 +193,60 @@ class _ChatapaloozaState extends State<Chatapalooza> {
           ),
         ),
         automaticallyImplyLeading: false,
+        actions: [
+
+          Padding(
+            padding: EdgeInsets.fromLTRB(4, 4, 4, 4),
+            child: FloatingActionButton(
+              onPressed: (){
+                setState(() {
+                  start_flow();
+                  // _loadMessages();
+                });
+              },
+              tooltip: 'Increment',
+              child: const Icon(Icons.refresh),
+            ),
+          ),
+          PopupMenuButton(
+            // add icon, by default "3 dot" icon
+            // icon: Icon(Icons.book)
+              itemBuilder: (context){
+                return [
+                  PopupMenuItem<int>(
+                    value: 0,
+                    child: Text("My Account"),
+                  ),
+
+                  PopupMenuItem<int>(
+                    value: 1,
+                    child: Text("Settings"),
+                  ),
+
+                  PopupMenuItem<int>(
+                    value: 2,
+                    child: Text("Logout"),
+                  ),
+                ];
+              },
+              onSelected:(value){
+                if(value == 0){
+                  print("My account menu is selected.");
+                }else if(value == 1){
+                  print("Settings menu is selected.");
+                }else if(value == 2){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) =>
+                          MyApp(),
+                    ),
+                  );
+                }
+              }
+          ),
+
+        ],
       ),
       backgroundColor: buildMaterialColor(Color(0xFF323232)),
       body: Stack(
@@ -202,8 +269,10 @@ class _ChatapaloozaState extends State<Chatapalooza> {
             showUserNames: true,
             user: _user,
           ),
+
         ],
       ),
+      /*
       floatingActionButton: Padding(
         padding: EdgeInsets.fromLTRB(1, 1, 1, 75),
         child: FloatingActionButton(
@@ -218,6 +287,8 @@ class _ChatapaloozaState extends State<Chatapalooza> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,   // This trailing comma makes auto-formatting nicer for build methods.
+
+       */
     );
   }
 
@@ -369,14 +440,24 @@ class _ChatapaloozaState extends State<Chatapalooza> {
 
         _cowork_cleanse();
 
-      }
-      else {
+      }else{
+
         print(response_ds_photo.reasonPhrase);
+        var textMessage = types.TextMessage(
+          author: _cowork,
+          createdAt: DateTime.now().millisecondsSinceEpoch,
+          id: const Uuid().v4(),
+          text: "Ah, there was an issue: " + response_ds_photo.reasonPhrase.toString() + '. Trying again for you.',
+        );
+
+        await _cowork_cleanse();
+        _addMessage(textMessage);
+        await _cowork_thinking();
+        await gen_post();
+
       }
 
-
-    }
-    else {
+    }else {
       print(response.reasonPhrase);
     }
 
@@ -424,7 +505,7 @@ class _ChatapaloozaState extends State<Chatapalooza> {
       id: upid,
       name: 'loadingsupport',
       size: 2,
-      uri: '/Users/faalbane/StudioProjects/withfaithcowork/lib/assets/loadingsupport.gif',
+      uri: 'https://firebasestorage.googleapis.com/v0/b/withfaithcowork.appspot.com/o/loadingsupport.gif?alt=media&token=8ce89545-c858-4a48-82bb-a058d451fb4c',
       width: 25,
     );
     _addMessage(ping);
@@ -684,6 +765,9 @@ class _ChatapaloozaState extends State<Chatapalooza> {
         }
 
         await OpenFilex.open(localPath);
+      }
+      if(message is types.TextMessage){
+        print(message.metadata);
       }
     }
 
