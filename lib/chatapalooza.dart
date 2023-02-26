@@ -97,11 +97,14 @@ class _ChatapaloozaState extends State<Chatapalooza> {
 
     _addMessage(textMessage);
 
-    var customPing = types.TextMessage(
+    var customPing = types.CustomMessage(
       author: _cowork,
       createdAt: DateTime.now().millisecondsSinceEpoch,
       id: const Uuid().v4(),
-      text: "test",
+      type: ElevatedButton(
+        onPressed: () {  },
+        child: Text('testing'),
+      ),
       metadata: {
         'action_key': 'gen'
       }
@@ -277,16 +280,16 @@ class _ChatapaloozaState extends State<Chatapalooza> {
         padding: EdgeInsets.fromLTRB(1, 1, 1, 75),
         child: FloatingActionButton(
           onPressed: (){
-            setState(() {
-              start_flow();
+            setState(() async {
+              await _cowork_cleanse();
               // _loadMessages();
             });
           },
           tooltip: 'Increment',
-          child: const Icon(Icons.refresh),
+          child: const Icon(Icons.qr_code_scanner),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,   // This trailing comma makes auto-formatting nicer for build methods.
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endTop,   // This trailing comma makes auto-formatting nicer for build methods.
 
        */
     );
@@ -298,8 +301,22 @@ class _ChatapaloozaState extends State<Chatapalooza> {
     print(flow_step);
     var toRemove = [];
     _messages.forEach( (e) {
+      print(e);
+      print(e.type);
+      if(e.type.toString() == 'MessageType.image'){
+        print(e.metadata);
+        if(e.metadata != null) {
+          if (e.metadata!['loading'] == 'true') {
+            print('found loading gif!');
+            toRemove.add(e);
+          }
+        }
+      }
+      /*
       if(e.toString().contains('loadingsupport.gif'))
         toRemove.add(e);
+
+       */
     });
     setState(() {
       _messages.removeWhere( (e) => toRemove.contains(e));
@@ -507,6 +524,9 @@ class _ChatapaloozaState extends State<Chatapalooza> {
       size: 2,
       uri: 'https://firebasestorage.googleapis.com/v0/b/withfaithcowork.appspot.com/o/loadingsupport.gif?alt=media&token=8ce89545-c858-4a48-82bb-a058d451fb4c',
       width: 25,
+      metadata: {
+        'loading': 'true',
+      }
     );
     _addMessage(ping);
   }
